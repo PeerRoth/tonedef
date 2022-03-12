@@ -44,7 +44,7 @@ iterations.forEach((it,itIdx)=>{
       onChange={handleChange}
     >
     {notes.map(note=>(
-      <ToggleButton value={note}>
+      <ToggleButton key={'nota'+note+name} value={note}>
           {note}
       <DialpadIcon />
         </ToggleButton>
