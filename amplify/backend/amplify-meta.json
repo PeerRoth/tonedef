@@ -1,0 +1,15 @@
+{
+  "providers": {
+    "awscloudformation": {
+      "AuthRoleName": "amplify-tonedef-dev-222734-authRole",
+      "UnauthRoleArn": "arn:aws:iam::619456503056:role/amplify-tonedef-dev-222734-unauthRole",
+      "AuthRoleArn": "arn:aws:iam::619456503056:role/amplify-tonedef-dev-222734-authRole",
+      "Region": "us-east-1",
+      "DeploymentBucketName": "amplify-tonedef-dev-222734-deployment",
+      "UnauthRoleName": "amplify-tonedef-dev-222734-unauthRole",
+      "StackName": "amplify-tonedef-dev-222734",
+      "StackId": "arn:aws:cloudformation:us-east-1:619456503056:stack/amplify-tonedef-dev-222734/bf134f00-a1bc-11ec-ba10-0a85688e4491",
+      "AmplifyAppId": "d27b4f0rprnivy"
+    }
+  }
+}
