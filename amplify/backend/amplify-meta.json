@@ -11,5 +11,98 @@
       "StackId": "arn:aws:cloudformation:us-east-1:619456503056:stack/amplify-tonedef-dev-222734/bf134f00-a1bc-11ec-ba10-0a85688e4491",
       "AmplifyAppId": "d27b4f0rprnivy"
     }
+  },
+  "hosting": {
+    "amplifyhosting": {
+      "service": "amplifyhosting",
+      "type": "cicd",
+      "lastPushTimeStamp": "2022-03-12T05:09:14.650Z"
+    }
+  },
+  "auth": {
+    "tonedef449f8a1f": {
+      "service": "Cognito",
+      "providerPlugin": "awscloudformation",
+      "dependsOn": [],
+      "customAuth": false,
+      "frontendAuthConfig": {
+        "socialProviders": [],
+        "usernameAttributes": [
+          "EMAIL"
+        ],
+        "signupAttributes": [
+          "EMAIL"
+        ],
+        "passwordProtectionSettings": {
+          "passwordPolicyMinLength": 8,
+          "passwordPolicyCharacters": []
+        },
+        "mfaConfiguration": "OFF",
+        "mfaTypes": [
+          "SMS"
+        ],
+        "verificationMechanisms": [
+          "EMAIL"
+        ]
+      },
+      "providerMetadata": {
+        "s3TemplateURL": "https://s3.amazonaws.com/amplify-tonedef-dev-222734-deployment/amplify-cfn-templates/auth/tonedef449f8a1f-cloudformation-template.json",
+        "logicalId": "authtonedef449f8a1f"
+      },
+      "lastPushTimeStamp": "2022-03-12T05:19:14.271Z",
+      "output": {
+        "UserPoolId": "us-east-1_MLeCSyqs7",
+        "AppClientIDWeb": "e274um688tv2tom5je8s8f48l",
+        "AppClientID": "6au9ukln3mkh29nb4ls0ni2rlf",
+        "IdentityPoolId": "us-east-1:18f7735b-6113-42c1-b1ce-6288ccc83325",
+        "UserPoolArn": "arn:aws:cognito-idp:us-east-1:619456503056:userpool/us-east-1_MLeCSyqs7",
+        "IdentityPoolName": "tonedef449f8a1f_identitypool_449f8a1f__dev",
+        "UserPoolName": "tonedef449f8a1f_userpool_449f8a1f"
+      },
+      "lastPushDirHash": "eu3XOajuKj1c2bk3PKc7wdnWrR4="
+    }
+  },
+  "storage": {
+    "s3tonedef": {
+      "service": "S3",
+      "providerPlugin": "awscloudformation",
+      "dependsOn": [],
+      "lastPushTimeStamp": "2022-03-12T05:19:14.271Z",
+      "providerMetadata": {
+        "s3TemplateURL": "https://s3.amazonaws.com/amplify-tonedef-dev-222734-deployment/amplify-cfn-templates/storage/cloudformation-template.json",
+        "logicalId": "storages3tonedef"
+      },
+      "output": {
+        "BucketName": "tonedefamation222734-dev",
+        "Region": "us-east-1"
+      },
+      "lastPushDirHash": "/cu2Urqelg29Uj3qRS0WvVVO9GU="
+    }
+  },
+  "api": {
+    "tonedef": {
+      "service": "AppSync",
+      "providerPlugin": "awscloudformation",
+      "output": {
+        "authConfig": {
+          "defaultAuthentication": {
+            "authenticationType": "API_KEY",
+            "apiKeyConfig": {
+              "apiKeyExpirationDays": 7
+            }
+          },
+          "additionalAuthenticationProviders": []
+        },
+        "GraphQLAPIIdOutput": "whiabxhtpjdgpc3yrquyiv6ove",
+        "GraphQLAPIEndpointOutput": "https://iwepnvlb3jhszcj3rk4tsgqj7e.appsync-api.us-east-1.amazonaws.com/graphql",
+        "GraphQLAPIKeyOutput": "da2-c4ucqyubejaufkamjlwauzqj5m"
+      },
+      "providerMetadata": {
+        "s3TemplateURL": "https://s3.amazonaws.com/amplify-tonedef-dev-222734-deployment/amplify-cfn-templates/api/cloudformation-template.json",
+        "logicalId": "apitonedef"
+      },
+      "lastPushTimeStamp": "2022-03-12T05:19:14.271Z",
+      "lastPushDirHash": "3fOJusY9bCcbs1bezK281BYT6w0="
+    }
   }
 }

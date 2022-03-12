@@ -1,0 +1,12 @@
+{
+  "version": 1,
+  "serviceConfiguration": {
+    "apiName": "tonedef",
+    "serviceName": "AppSync",
+    "gqlSchemaPath": "C:\\_ROOT\\tonedef\\tonedef\\amplify\\backend\\api\\tonedef\\schema.graphql",
+    "defaultAuthType": {
+      "mode": "API_KEY",
+      "expirationTime": 7
+    }
+  }
+}

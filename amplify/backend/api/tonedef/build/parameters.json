@@ -1,0 +1,7 @@
+{
+    "AppSyncApiName": "tonedef",
+    "DynamoDBBillingMode": "PAY_PER_REQUEST",
+    "DynamoDBEnableServerSideEncryption": false,
+    "S3DeploymentBucket": "amplify-tonedef-dev-222734-deployment",
+    "S3DeploymentRootKey": "amplify-appsync-files/7c259a9778186303b5f4aa26c4f901d7c57ae7d2"
+}

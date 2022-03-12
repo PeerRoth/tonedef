@@ -10,6 +10,18 @@
       "StackName": "amplify-tonedef-dev-222734",
       "StackId": "arn:aws:cloudformation:us-east-1:619456503056:stack/amplify-tonedef-dev-222734/bf134f00-a1bc-11ec-ba10-0a85688e4491",
       "AmplifyAppId": "d27b4f0rprnivy"
+    },
+    "categories": {
+      "hosting": {
+        "amplifyhosting": {
+          "appId": "d27b4f0rprnivy",
+          "type": "cicd"
+        }
+      },
+      "auth": {
+        "tonedef449f8a1f": {},
+        "true": {}
+      }
     }
   }
 }
