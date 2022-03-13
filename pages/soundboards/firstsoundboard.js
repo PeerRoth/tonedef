@@ -1,4 +1,4 @@
-import React,{useState} from 'react';
+import React,{useEffect, useState} from 'react';
 import * as Tone from 'tone'
 import ToggleButton from '@mui/material/ToggleButton';
 import ToggleButtonGroup from '@mui/material/ToggleButtonGroup';
@@ -24,8 +24,16 @@ const Keys = ({colorStart=20,notes,name,userInstrument,handler})=>{
                 borderRadius:keyWidth/2,
                 backgroundColor:`rgb(${colorStart},${(360/ara.length)*noteIdx},20)`,
                 textAlign:'center',
+                fontWeight:700,
+                fontSize:'.8rem',
+                paddingTop:keyWidth/3,
             }}
-            onMouseOver={()=>{handler(note,userInstrument)}} 
+            onMouseOver={(ev)=>{
+                // let prevStyle=window.getComputedStyle(ev.target).transform;
+                // console.log(prevStyle)
+                ev.target.style.transform='rotate(40deg)';
+                handler(note,userInstrument);
+            }} 
             key={'nota'+note+name} >
             {note}
         </div>
@@ -33,70 +41,58 @@ const Keys = ({colorStart=20,notes,name,userInstrument,handler})=>{
 </div>)};
 
 export default function FirstPost(){
+    const [userInstrument,setUserInstrument]=useState('Synth');
+    const [synth,setSynth]=useState(null);
 
+    useEffect(()=>{
+        const synth = new Tone[userInstrument]().toDestination();
+        setSynth({synth:synth});
+    },[userInstrument]);
+    
     function playNote(val,instrument='Synth'){
-        const synth = new Tone[instrument]().toDestination();
         const now = Tone.now()
-        synth.triggerAttack(val, now)
-        synth.triggerRelease(now + .1)
+        synth.synth.triggerAttack(val, now)
+        synth.synth.triggerRelease(now + .1);
     };
 
-    // const handleChange = (event, newNoteValue) => {
-    //     console.log(event)
-    //     let varul = event.target;
-    //     console.log(varul);
-    //     let varuli = varul.innerHTML;
-    //     console.log(varuli);
-    //     playNote(varul,userInstrument)
-    //     // playNote(newNoteValue,userInstrument);
-    //     // setTopNote(newNoteValue)
-    // };
-
-
-const Buttons = ({handleChange,notes,name})=>(
-    <ToggleButtonGroup
-        color="primary"
-        exclusive
-        onChange={handleChange}
-        >
-        {notes.map(note=>(
-            <ToggleButton key={'nota'+note+name} value={note}>
-                {note}
-                <DialpadIcon />
-            </ToggleButton>
-    ))}
-    </ToggleButtonGroup>);
+    // const Buttons = ({handleChange,notes,name})=>(
+    //     <ToggleButtonGroup color="primary" exclusive onChange={handleChange} >
+    //         {notes.map(note=>(
+    //             <ToggleButton key={'nota'+note+name} value={note}>
+    //                 {note}<DialpadIcon />
+    //             </ToggleButton>
+    //     ))}
+    //     </ToggleButtonGroup>
+    // );
 
 
 
-const chordNotesBMinor7=[['B',4],['D',5],['F#',5],['A',5]];
-const chordNotesAMinor7=[['A',4],['C',5],['E',5],['G',5]];
-const chordNotesEMinor7=[['B',4],['D',5],['E',5],['G',5]];
+    const chordNotesBMinor7=[['B',4],['D',5],['F#',5],['A',5]];
+    const chordNotesAMinor7=[['A',4],['C',5],['E',5],['G',5]];
+    const chordNotesEMinor7=[['B',4],['D',5],['E',5],['G',5]];
 
-const fullArray = (chorno) => {
-    const notes=[];
-    const iterations=['a','a','a','a',];
-    iterations.forEach((it,itIdx)=>{
-        chorno.forEach(cn=>{
-            notes.push(cn[0]+(cn[1]+itIdx-2));
+    const fullArray = (chorno) => {
+        const notes=[];
+        const iterations=['a','a','a','a',];
+        iterations.forEach((it,itIdx)=>{
+            chorno.forEach(cn=>{
+                notes.push(cn[0]+(cn[1]+itIdx-2));
+            });
         });
-    });
-    return notes;
-};
+        return notes;
+    };
 
-const [userInstrument,setUserInstrument]=useState('Synth');
 
-console.log(userInstrument);
-const [topNote,setTopNote]=useState('C3');
+    // console.log(userInstrument);
 
     return(
         <>
             <InstrumentPicker userInstrument={userInstrument} setUserInstrument={setUserInstrument} />
             <br />
 
-<Keys handler={playNote} setTopNote={setTopNote}  colorStart={40}  userInstrument={userInstrument} notes={fullArray(chordNotesBMinor7)} name={'BMinor7'} /><br />
-<Keys handler={playNote} setTopNote={setTopNote}  colorStart={140} userInstrument={userInstrument} notes={fullArray(chordNotesAMinor7)} name={'AMinor7'}  /><br />
-<Keys handler={playNote} setTopNote={setTopNote}  colorStart={240} userInstrument={userInstrument} notes={fullArray(chordNotesEMinor7)} name={'EMinor7'}  /><br />
+<Keys handler={playNote}   colorStart={40}  userInstrument={userInstrument} notes={fullArray(chordNotesBMinor7)} name={'BMinor7'} /><br />
+<Keys handler={playNote}   colorStart={140} userInstrument={userInstrument} notes={fullArray(chordNotesAMinor7)} name={'AMinor7'}  /><br />
+<Keys handler={playNote}   colorStart={240} userInstrument={userInstrument} notes={fullArray(chordNotesEMinor7)} name={'EMinor7'}  /><br />
             
             <br />
             {/* <Loopy noteValue={topNote} /> */}
