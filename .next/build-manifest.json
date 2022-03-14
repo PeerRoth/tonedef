@@ -15,11 +15,6 @@
     "static/development/_middlewareManifest.js"
   ],
   "pages": {
-    "/": [
-      "static/chunks/webpack.js",
-      "static/chunks/main.js",
-      "static/chunks/pages/index.js"
-    ],
     "/_app": [
       "static/chunks/webpack.js",
       "static/chunks/main.js",
@@ -30,10 +25,15 @@
       "static/chunks/main.js",
       "static/chunks/pages/_error.js"
     ],
-    "/soundboards/firstsoundboard": [
+    "/soundboards/soundboarddesktop": [
       "static/chunks/webpack.js",
       "static/chunks/main.js",
-      "static/chunks/pages/soundboards/firstsoundboard.js"
+      "static/chunks/pages/soundboards/soundboarddesktop.js"
+    ],
+    "/soundboards/soundboardmobile": [
+      "static/chunks/webpack.js",
+      "static/chunks/main.js",
+      "static/chunks/pages/soundboards/soundboardmobile.js"
     ]
   },
   "ampFirstPages": []

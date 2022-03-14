@@ -1,16 +1,44 @@
 import React,{useEffect, useState} from 'react';
-import * as Tone from 'tone'
-import Link from 'next/link';
-import InstrumentPicker from '../../components/instrumentpicker';
-// import Loopy from '../../components/loopy';
-import Cuby from '../../components/cuby';
-import { array2grouped } from '../../components/array2grouped';
+import * as Tone            from 'tone'
+import Link                 from 'next/link';
+import InstrumentPicker     from '../../components/instrumentpicker';
+import Cuby                 from '../../components/cuby';
+import { array2grouped }    from '../../components/array2grouped';
+import { Button } from '@mui/material';
 
-const Keys = ({colorStart=20,notes,name,userInstrument,handler})=>{
-    const keyWidth=35;
+const Keys = ({colorStart=20,notes,name,userInstrument,handler,onDesktop})=>{
+    const keyWidth=60;
+    let noteseys=notes.map((noteValue,noteIdx)=>{
+        let tempy={};
+        tempy.note=noteValue;
+        tempy.left=(keyWidth*noteIdx)+(noteIdx*1);
+        tempy.right=(keyWidth*noteIdx)+(noteIdx*1)+keyWidth;
+        console.log(tempy);
+        return tempy;
+    });
+
+    const [touchNote,setTouchNote]=useState(null);
+    useEffect(()=>{
+        if (touchNote&& touchNote.note) {
+            handler(touchNote.note,userInstrument);
+        }
+    },[touchNote]);
+
+
+
     return (
-    <div style={{width:'100vw',marginTop:'3rem',}} >
-    {notes.map((note,noteIdx,ara)=>{
+    <div
+        style={{width:'100vw',marginTop:'3rem',}} 
+        onTouchMove={!onDesktop?(ev)=>{
+            console.log([ev,ev.touches[0].clientX,ev.touches[0].clientY]);
+            let currentTouchingNote=noteseys[Math.floor(ev.touches[0].clientX/keyWidth)];
+            console.log(currentTouchingNote);
+            if (currentTouchingNote!==touchNote){
+                setTouchNote(currentTouchingNote);
+            }
+        }:undefined}
+    >
+    {noteseys.map(({note,left},noteIdx,ara)=>{
         let left=(keyWidth*noteIdx)+(noteIdx*1);
     return (
         <div
@@ -20,27 +48,25 @@ const Keys = ({colorStart=20,notes,name,userInstrument,handler})=>{
                 display:'inline',
                 width:keyWidth,
                 height:keyWidth,
-                borderRadius:keyWidth/2,
                 backgroundColor:`rgb(${colorStart},${(360/ara.length)*noteIdx},20)`,
                 textAlign:'center',
                 fontWeight:700,
                 fontSize:'.8rem',
                 paddingTop:keyWidth/3,
             }}
-            onMouseOver={(ev)=>{
-                // let prevStyle=window.getComputedStyle(ev.target).transform;
-                ev.target.style.transform='rotate(40deg)';
-                handler(note,userInstrument);
-            }} 
-            key={'nota'+note+name} >
-            {note}
-        </div>
-    )})}
+            onMouseOver={onDesktop
+                ?(ev)=>{
+                    // ev.target.style.transform='rotate(40deg)';
+                handler(note,userInstrument);}
+                :undefined}
+        key={'nota'+note+name} >{note}</div>
+)})}
 </div>)};
 
 export default function FirstSoundBoard(){
     const [userInstrument,setUserInstrument]=useState('Synth');
     const [synth,setSynth]=useState(null);
+    const [onDesktop,setOnDesktop]=useState(true);
 
     useEffect(()=>{
         const synth = new Tone[userInstrument]().toDestination();
@@ -80,11 +106,14 @@ export default function FirstSoundBoard(){
 
     return(
         <div style={{position:'fixed',width:'100vw',height:'100vh',top:'0px',left:'0px',backgroundColor:'lightblue',}}>
+
+            <Button onClick={()=>{setOnDesktop(!onDesktop)}} >DESKTOP</Button>
+
             <InstrumentPicker userInstrument={userInstrument} setUserInstrument={setUserInstrument} />
             <br />
-<div style={{borderBottom:'1px solid black',marginTop:'1rem',height:'200px',}}>{' AMinor 7'}{array2grouped(fullArray(chordNotesBMinor7),8).map((noteGroup,ngIdx)=>(<div key={'chno'+(ngIdx+3)}><Keys handler={playNote} colorStart={(1+ngIdx)* 40}   userInstrument={userInstrument} notes={noteGroup} name={'BMinor7'} /><br /></div>))}</div>
-<div style={{borderBottom:'1px solid black',marginTop:'1rem',height:'200px',}}>{' BMinor 7'}{array2grouped(fullArray(chordNotesAMinor7),8).map((noteGroup,ngIdx)=>(<div key={'chno'+(ngIdx+8)}><Keys handler={playNote} colorStart={(1+ngIdx)* 90}   userInstrument={userInstrument} notes={noteGroup} name={'BMinor7'} /><br /></div>))}</div>
-<div style={{borderBottom:'1px solid black',marginTop:'1rem',height:'200px',}}>{' EMinor 7'}{array2grouped(fullArray(chordNotesEMinor7),8).map((noteGroup,ngIdx)=>(<div key={'chno'+(ngIdx+14)}><Keys handler={playNote} colorStart={(1+ngIdx)*120}  userInstrument={userInstrument} notes={noteGroup} name={'BMinor7'} /><br /></div>))}</div>
+<div style={{borderBottom:'1px solid black',marginTop:'1rem',height:'200px',}}>{' AMinor 7'}{array2grouped(fullArray(chordNotesBMinor7),8).map((noteGroup,ngIdx)=>(<div key={'chno'+(ngIdx+3)} ><Keys onDesktop={onDesktop} handler={playNote} colorStart={(1+ngIdx)* 40}   userInstrument={userInstrument} notes={noteGroup} name={'BMinor7'} /><br /></div>))}</div>
+<div style={{borderBottom:'1px solid black',marginTop:'1rem',height:'200px',}}>{' BMinor 7'}{array2grouped(fullArray(chordNotesAMinor7),8).map((noteGroup,ngIdx)=>(<div key={'chno'+(ngIdx+8)} ><Keys onDesktop={onDesktop} handler={playNote} colorStart={(1+ngIdx)* 90}   userInstrument={userInstrument} notes={noteGroup} name={'BMinor7'} /><br /></div>))}</div>
+<div style={{borderBottom:'1px solid black',marginTop:'1rem',height:'200px',}}>{' EMinor 7'}{array2grouped(fullArray(chordNotesEMinor7),8).map((noteGroup,ngIdx)=>(<div key={'chno'+(ngIdx+14)}><Keys onDesktop={onDesktop} handler={playNote} colorStart={(1+ngIdx)*120}  userInstrument={userInstrument} notes={noteGroup} name={'BMinor7'} /><br /></div>))}</div>
             
             <br />
             <br />
