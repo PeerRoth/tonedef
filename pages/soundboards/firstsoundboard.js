@@ -1,14 +1,13 @@
 import React,{useEffect, useState} from 'react';
 import * as Tone from 'tone'
-import ToggleButton from '@mui/material/ToggleButton';
-import ToggleButtonGroup from '@mui/material/ToggleButtonGroup';
-import DialpadIcon from '@mui/icons-material/Dialpad';
 import Link from 'next/link';
 import InstrumentPicker from '../../components/instrumentpicker';
 // import Loopy from '../../components/loopy';
+import Cuby from '../../components/cuby';
+import { array2grouped } from '../../components/array2grouped';
 
 const Keys = ({colorStart=20,notes,name,userInstrument,handler})=>{
-    const keyWidth=60;
+    const keyWidth=35;
     return (
     <div style={{width:'100vw',marginTop:'3rem',}} >
     {notes.map((note,noteIdx,ara)=>{
@@ -30,7 +29,6 @@ const Keys = ({colorStart=20,notes,name,userInstrument,handler})=>{
             }}
             onMouseOver={(ev)=>{
                 // let prevStyle=window.getComputedStyle(ev.target).transform;
-                // console.log(prevStyle)
                 ev.target.style.transform='rotate(40deg)';
                 handler(note,userInstrument);
             }} 
@@ -40,7 +38,7 @@ const Keys = ({colorStart=20,notes,name,userInstrument,handler})=>{
     )})}
 </div>)};
 
-export default function FirstPost(){
+export default function FirstSoundBoard(){
     const [userInstrument,setUserInstrument]=useState('Synth');
     const [synth,setSynth]=useState(null);
 
@@ -54,19 +52,17 @@ export default function FirstPost(){
         synth.synth.triggerAttack(val, now)
         synth.synth.triggerRelease(now + .1);
     };
-
-    // const Buttons = ({handleChange,notes,name})=>(
-    //     <ToggleButtonGroup color="primary" exclusive onChange={handleChange} >
-    //         {notes.map(note=>(
-    //             <ToggleButton key={'nota'+note+name} value={note}>
-    //                 {note}<DialpadIcon />
-    //             </ToggleButton>
-    //     ))}
-    //     </ToggleButtonGroup>
-    // );
-
-
-
+    
+    const [loop,setLoop]=useState(null);
+    useEffect(()=>{
+            const synthA = new Tone.FMSynth().toDestination();
+            const loopA =  new Tone.Loop(time => {
+                let noteValue='C5';
+                synthA.triggerAttackRelease(noteValue, "8n", time);
+            },"4n").start(0);
+            setLoop(loopA);
+        },[])
+        
     const chordNotesBMinor7=[['B',4],['D',5],['F#',5],['A',5]];
     const chordNotesAMinor7=[['A',4],['C',5],['E',5],['G',5]];
     const chordNotesEMinor7=[['B',4],['D',5],['E',5],['G',5]];
@@ -82,20 +78,14 @@ export default function FirstPost(){
         return notes;
     };
 
-
-    // console.log(userInstrument);
-
     return(
-        <>
+        <div style={{position:'fixed',width:'100vw',height:'100vh',top:'0px',left:'0px',backgroundColor:'lightblue',}}>
             <InstrumentPicker userInstrument={userInstrument} setUserInstrument={setUserInstrument} />
             <br />
-
-<Keys handler={playNote}   colorStart={40}  userInstrument={userInstrument} notes={fullArray(chordNotesBMinor7)} name={'BMinor7'} /><br />
-<Keys handler={playNote}   colorStart={140} userInstrument={userInstrument} notes={fullArray(chordNotesAMinor7)} name={'AMinor7'}  /><br />
-<Keys handler={playNote}   colorStart={240} userInstrument={userInstrument} notes={fullArray(chordNotesEMinor7)} name={'EMinor7'}  /><br />
+<div style={{borderBottom:'1px solid black',marginTop:'1rem',height:'200px',}}>{' AMinor 7'}{array2grouped(fullArray(chordNotesBMinor7),8).map((noteGroup,ngIdx)=>(<div key={'chno'+(ngIdx+3)}><Keys handler={playNote} colorStart={(1+ngIdx)* 40}   userInstrument={userInstrument} notes={noteGroup} name={'BMinor7'} /><br /></div>))}</div>
+<div style={{borderBottom:'1px solid black',marginTop:'1rem',height:'200px',}}>{' BMinor 7'}{array2grouped(fullArray(chordNotesAMinor7),8).map((noteGroup,ngIdx)=>(<div key={'chno'+(ngIdx+8)}><Keys handler={playNote} colorStart={(1+ngIdx)* 90}   userInstrument={userInstrument} notes={noteGroup} name={'BMinor7'} /><br /></div>))}</div>
+<div style={{borderBottom:'1px solid black',marginTop:'1rem',height:'200px',}}>{' EMinor 7'}{array2grouped(fullArray(chordNotesEMinor7),8).map((noteGroup,ngIdx)=>(<div key={'chno'+(ngIdx+14)}><Keys handler={playNote} colorStart={(1+ngIdx)*120}  userInstrument={userInstrument} notes={noteGroup} name={'BMinor7'} /><br /></div>))}</div>
             
-            <br />
-            {/* <Loopy noteValue={topNote} /> */}
             <br />
             <br />
 
@@ -104,6 +94,13 @@ export default function FirstPost(){
                     <a>home</a>
                 </Link>
             </h5>
+
+
+            <Cuby 
+                startHandler={()=>{Tone.Transport.start()}} 
+                stopHandler={()=>{Tone.Transport.stop()}}
+            />
+
             
-        </>)
-}
+        </div>)
+};
