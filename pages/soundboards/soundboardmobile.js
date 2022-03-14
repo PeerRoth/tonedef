@@ -1,10 +1,11 @@
-import React,{useEffect, useState} from 'react';
+import React,{useEffect, useState, useRef } from 'react';
 import * as Tone            from 'tone'
 import Link                 from 'next/link';
 import InstrumentPicker     from '../../components/instrumentpicker';
 import { array2grouped }    from '../../components/array2grouped';
+import { Button } from '@mui/material';
 
-const Keys = ({colorStart=20,notes,name,userInstrument,handler})=>{
+const Keys = ({colorStart=20,notes,name,userInstrument,handler,refnow})=>{
     const keyWidth=60;
     let noteseys=notes.map((noteValue,noteIdx)=>{
         let tempy={};
@@ -21,8 +22,7 @@ const Keys = ({colorStart=20,notes,name,userInstrument,handler})=>{
             handler(touchNote.note,userInstrument);
         }
     },[touchNote]);
-
-
+console.log(refnow);
 
     return (
     <div
@@ -58,19 +58,50 @@ export default function SoundboardMobile(){
     const [userInstrument,setUserInstrument]=useState('Synth');
     const [synth,setSynth]=useState(null);
 
+
+
     useEffect(()=>{
-        const synth = new Tone[userInstrument]().toDestination();
-        setSynth({synth:synth});
+        if (userInstrument){
+            const synth = new Tone[userInstrument]().toDestination();
+            setSynth({synth:synth});
+        }
     },[userInstrument]);
+
+    const nowRef=useRef(null);
+console.log(nowRef.current+' __BOOKABUKAH!')
     
     function playNote(val,instrument='Synth'){
+
         console.log(synth);
-        if (synth && synth['synth']){
-            const now = Tone.now()
-            console.log(now);
-            synth.synth.triggerAttack(val, now)
-            synth.synth.triggerRelease(now + .1);
-        };
+        if (Tone.context.state !== "running"){
+            console.log('AITN RUNN')
+            Tone.context.resume().then(() => {
+                console.log('____REJUMET');
+                if (synth && synth['synth']){
+                    const now = Tone.now()
+                    console.log(now);
+                    console.log(Tone.context);
+                    synth.synth.triggerAttack(val, now)
+                    synth.synth.triggerRelease(now + .1);
+                };
+              });
+        } else {
+            if (synth && synth['synth']){
+                const now = Tone.now();
+                console.log(now);
+                if (nowRef&&now===nowRef.current){
+                    console.log('MUST BE > NOWWNWOOWNWOW');
+                    console.log(nowRef.current);
+                    return false;
+                }
+                console.log(Tone.context);
+                synth.synth.triggerAttack(val, now)
+                synth.synth.triggerRelease(now + .1);
+                nowRef.current=now;
+            };
+        }
+
+     
     };
     
     const chordNotesBMinor7=[['B',4],['D',5],['F#',5],['A',5]];
@@ -87,15 +118,38 @@ export default function SoundboardMobile(){
         });
         return notes;
     };
-
+console.log(Tone)
+console.log(Tone.context);
+console.log(Tone.context.state);
     return(
         <div style={{position:'fixed',width:'100vw',height:'100vh',top:'0px',left:'0px',backgroundColor:'lightblue',}}>
 
+
+{Tone.context.state !== "running"
+&&
+<div id="audioContextSuspended">
+<div style={{width:'100vw',height:'100vh',position:'fixed',top:'0px',left:'0px',}}>
+<Button onClick={()=>{
+    Tone.context.resume().then(() => {
+        console.log('____REJUMET');
+      });
+    }}
+    id="unmute"
+    >
+        PLAY
+    </Button>
+</div>
+</div>
+}
+{
+    
+<>
+
             <InstrumentPicker userInstrument={userInstrument} setUserInstrument={setUserInstrument} />
             <br />
-<div style={{borderBottom:'1px solid black',marginTop:'1rem',height:'200px',}}>{' AMinor 7'}{array2grouped(fullArray(chordNotesBMinor7),8).map((noteGroup,ngIdx)=>(<div key={'chno'+(ngIdx+3)} ><Keys handler={playNote} colorStart={(1+ngIdx)* 40}   userInstrument={userInstrument} notes={noteGroup} name={'BMinor7'} /><br /></div>))}</div>
-<div style={{borderBottom:'1px solid black',marginTop:'1rem',height:'200px',}}>{' BMinor 7'}{array2grouped(fullArray(chordNotesAMinor7),8).map((noteGroup,ngIdx)=>(<div key={'chno'+(ngIdx+8)} ><Keys handler={playNote} colorStart={(1+ngIdx)* 90}   userInstrument={userInstrument} notes={noteGroup} name={'BMinor7'} /><br /></div>))}</div>
-<div style={{borderBottom:'1px solid black',marginTop:'1rem',height:'200px',}}>{' EMinor 7'}{array2grouped(fullArray(chordNotesEMinor7),8).map((noteGroup,ngIdx)=>(<div key={'chno'+(ngIdx+14)}><Keys handler={playNote} colorStart={(1+ngIdx)*120}  userInstrument={userInstrument} notes={noteGroup} name={'BMinor7'} /><br /></div>))}</div>
+<div style={{borderBottom:'1px solid black',marginTop:'1rem',height:'200px',}}>{' AMinor 7'}{array2grouped(fullArray(chordNotesBMinor7),8).map((noteGroup,ngIdx)=>(<div key={'chno'+(ngIdx+3)} ><Keys refnow={nowRef.current} handler={playNote} colorStart={(1+ngIdx)* 40}   userInstrument={userInstrument} notes={noteGroup} name={'BMinor7'} /><br /></div>))}</div>
+<div style={{borderBottom:'1px solid black',marginTop:'1rem',height:'200px',}}>{' BMinor 7'}{array2grouped(fullArray(chordNotesAMinor7),8).map((noteGroup,ngIdx)=>(<div key={'chno'+(ngIdx+8)} ><Keys refnow={nowRef.current} handler={playNote} colorStart={(1+ngIdx)* 90}   userInstrument={userInstrument} notes={noteGroup} name={'BMinor7'} /><br /></div>))}</div>
+<div style={{borderBottom:'1px solid black',marginTop:'1rem',height:'200px',}}>{' EMinor 7'}{array2grouped(fullArray(chordNotesEMinor7),8).map((noteGroup,ngIdx)=>(<div key={'chno'+(ngIdx+14)}><Keys refnow={nowRef.current} handler={playNote} colorStart={(1+ngIdx)*120}  userInstrument={userInstrument} notes={noteGroup} name={'BMinor7'} /><br /></div>))}</div>
             
             <br /><br />
 
@@ -104,6 +158,7 @@ export default function SoundboardMobile(){
                     <a>home</a>
                 </Link>
             </h5>
-
+            </>
+}
         </div>)
 };

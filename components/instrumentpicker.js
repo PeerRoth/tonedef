@@ -15,7 +15,7 @@ export default function InstrumentPicker({setUserInstrument,userInstrument}) {
         'MetalSynth',
         'MonoSynth',
         'PluckSynth',
-        'PolySynth',
+        // 'PolySynth',
         'Synth',
     ];
     

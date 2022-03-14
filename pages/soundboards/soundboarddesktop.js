@@ -2,9 +2,7 @@ import React,{useEffect, useState} from 'react';
 import * as Tone            from 'tone'
 import Link                 from 'next/link';
 import InstrumentPicker     from '../../components/instrumentpicker';
-// import Cuby                 from '../../components/cuby';
 import { array2grouped }    from '../../components/array2grouped';
-// import { Button } from '@mui/material';
 
 const Keys = ({colorStart=20,notes,name,userInstrument,handler})=>{
     const keyWidth=60;
@@ -21,9 +19,7 @@ const Keys = ({colorStart=20,notes,name,userInstrument,handler})=>{
     <div
         style={{width:'100vw',height:keyWidth,}} 
     >
-    {noteseys.map(({note,left},noteIdx,ara)=>{
-        // let left=(keyWidth*noteIdx)+(noteIdx*1);
-    return (
+    {noteseys.map(({note,left},noteIdx,ara)=>(
         <div
             style={{
                 position:'absolute',
@@ -41,13 +37,12 @@ const Keys = ({colorStart=20,notes,name,userInstrument,handler})=>{
                     ev.target.style.transform='rotate(40deg)';
                 handler(note,userInstrument);}}
         key={'nota'+note+name} >{note}</div>
-)})}
+))}
 </div>)};
 
 export default function FirstSoundBoard(){
     const [userInstrument,setUserInstrument]=useState('Synth');
     const [synth,setSynth]=useState(null);
-    // const [onDesktop,setOnDesktop]=useState(true);
 
     useEffect(()=>{
         const synth = new Tone[userInstrument]().toDestination();
@@ -59,16 +54,6 @@ export default function FirstSoundBoard(){
         synth.synth.triggerAttack(val, now)
         synth.synth.triggerRelease(now + .1);
     };
-    
-    // const [loop,setLoop]=useState(null);
-    // useEffect(()=>{
-    //         const synthA = new Tone.FMSynth().toDestination();
-    //         const loopA =  new Tone.Loop(time => {
-    //             let noteValue='C5';
-    //             synthA.triggerAttackRelease(noteValue, "8n", time);
-    //         },"4n").start(0);
-    //         setLoop(loopA);
-    //     },[])
         
     const chordNotesBMinor7=[['B',4],['D',5],['F#',5],['A',5]];
     const chordNotesAMinor7=[['A',4],['C',5],['E',5],['G',5]];
