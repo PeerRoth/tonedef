@@ -38,7 +38,7 @@ const Keys = ({colorStart=20,notes,name,userInstrument,handler})=>{
         }}
     >
     {noteseys.map(({note,left},noteIdx,ara)=>{
-        let left=(keyWidth*noteIdx)+(noteIdx*1);
+        // let left=(keyWidth*noteIdx)+(noteIdx*1);
     return (
         <div
             style={{

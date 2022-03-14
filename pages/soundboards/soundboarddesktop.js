@@ -22,7 +22,7 @@ const Keys = ({colorStart=20,notes,name,userInstrument,handler})=>{
         style={{width:'100vw',height:keyWidth,}} 
     >
     {noteseys.map(({note,left},noteIdx,ara)=>{
-        let left=(keyWidth*noteIdx)+(noteIdx*1);
+        // let left=(keyWidth*noteIdx)+(noteIdx*1);
     return (
         <div
             style={{
